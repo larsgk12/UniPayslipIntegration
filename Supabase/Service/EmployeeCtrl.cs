@@ -34,11 +34,12 @@ namespace SupabaseConnection.Service
                 {
                     name = softRigEmployee.Name,
                     external_id = softRigEmployee.ID,
-                    company_id = softRigEmployee.companyID
+                    company_id = 3
                 };
 
                 var instance = Supabase.Client.Instance;
                 var insert = await instance.From<Employee>().Insert(model);
+                Console.WriteLine("Employee inserted" + softRigEmployee.Name);
             }
         }
     }

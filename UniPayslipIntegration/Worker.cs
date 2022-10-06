@@ -2,6 +2,7 @@ using Microsoft.Extensions.Options;
 using Softrig;
 using Supabase.Service;
 using SupabaseConnection.Service;
+using SupabaseConnection.SoftRigModels;
 
 namespace UniPayslipIntegration
 {
@@ -22,7 +23,8 @@ namespace UniPayslipIntegration
         {
             var supaBase = new SupaBaseService();
             supaBase.SupaBaseClientConnection(_supabaseSettings.key, _supabaseSettings.url);
-            
+
+            var supabaseCompanies = new CompanyCtrl();
             var employeeRun = new EmployeeCtrl();
 
             var uniDataService = new UniDataService();
@@ -32,8 +34,24 @@ namespace UniPayslipIntegration
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                await Task.Delay(10000, stoppingToken);
-                await employeeRun.GetSupaBaseEmployee();
+                if (uniDataService.Companies.Count > 0)
+                {
+                    var uniCompanies = uniDataService.Companies;
+                    var comp = await supabaseCompanies.GetSupaBaseCompany();
+
+                    var listOfNewcompanies = uniCompanies.Where(c => comp.All(s => c.Key != s.companykey)).ToList();
+                    if (listOfNewcompanies.Count > 0)
+                    {
+                        var supabaseComp = listOfNewcompanies.Select(c => new SoftRigCompany() { CompanyKey = c.Key, Name = c.Name }).ToList();
+                        supabaseCompanies.PostSupaBaseCompany(supabaseComp);
+                        foreach (var newComp in listOfNewcompanies)
+                        {
+                            var employee = uniDataService.GetEmployees(newComp.Key);
+                            employeeRun.PostSupaBaseEmployee(employee);
+                        }
+                    }
+                }
+                await Task.Delay(1000, stoppingToken);
             }
         }
     }

@@ -15,5 +15,5 @@ public class Company : SupabaseModel
     public string companykey { get; set; }
     public string name { get; set; }
     public string created_at { get; set; }
-    public int external_id { get; set; }
+
 }

@@ -29,7 +29,6 @@ namespace SupabaseConnection.Service
                 var model = new Supabase.Models.Company
                 {
                     name = softRigCompany.Name,
-                    external_id = softRigCompany.id,
                     companykey = softRigCompany.CompanyKey,
                 };
 
