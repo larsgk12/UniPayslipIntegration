@@ -46,7 +46,7 @@ namespace UniPayslipIntegration
                         supabaseCompanies.PostSupaBaseCompany(supabaseComp);
                         foreach (var newComp in listOfNewcompanies)
                         {
-                            var employee = uniDataService.GetEmployees(newComp.Key);
+                            var employee = await uniDataService.GetEmployees(newComp.Key);
                             employeeRun.PostSupaBaseEmployee(employee);
                         }
                     }
