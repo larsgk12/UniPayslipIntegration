@@ -1,6 +1,12 @@
-﻿namespace Supabase.Models;
+﻿using Postgrest.Attributes;
 
-public class Employee
+namespace Supabase.Models;
+
+[Table("employee")]
+public class Employee : SupabaseModel
 {
+
+    [PrimaryKey("id", false)]
+    public int Id { get; set; }
 
 }
