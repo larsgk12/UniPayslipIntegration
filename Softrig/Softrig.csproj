@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="EconomyApi" Version="1.1.5" />
+    <PackageReference Include="functions-csharp" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
   </ItemGroup>
 

@@ -14,3 +14,4 @@ public class Employee : SupabaseModel
     public bool sync { get; set; } 
     public string name { get; set; }
 }
+

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using Supabase.Service;
+using SupabaseConnection.Service;
 
 namespace UniPayslipIntegration
 {
@@ -20,8 +21,9 @@ namespace UniPayslipIntegration
         {
             var supaBase = new SupaBaseService();
             supaBase.SupaBaseClientConnection(_supabaseSettings.key, _supabaseSettings.url);
-            supaBase.SupaBaseCompanyRun();
-            supaBase.SupaBaseCompanyAdminRun();
+            
+            var employeeRun = new EmployeeCtrl();
+            //employeeRun.PostSupaBaseEmployee();
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -29,9 +31,9 @@ namespace UniPayslipIntegration
                 _logger.LogInformation("Url {key}", _softRigSettings.authUrl);
 
                 await Task.Delay(10000, stoppingToken);
-                await Task.Delay(1000, stoppingToken);
-
-                supaBase.SupaBaseEmployeeRun();
+               // await Task.Delay(1000, stoppingToken);
+                
+                employeeRun.GetSupaBaseEmployee();
             }
         }
     }

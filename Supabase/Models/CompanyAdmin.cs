@@ -12,6 +12,7 @@ public class CompanyAdmin : SupabaseModel
 {
     [PrimaryKey("id", false)]
     public int id { get; set; }
+    public string name { get; set; }    
     public string company_id { get; set; }
     public string email { get; set; }
     public string created_at { get; set; }

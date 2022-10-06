@@ -11,7 +11,9 @@ public class Company : SupabaseModel
 {
     [PrimaryKey("id", false)]
     public int id { get; set; }
-    public string key { get; set; }
+    [Column("key")]
+    public string companykey { get; set; }
     public string name { get; set; }
     public string created_at { get; set; }
+    public int external_id { get; set; }
 }
