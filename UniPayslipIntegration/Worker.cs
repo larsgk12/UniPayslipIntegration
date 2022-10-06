@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Options;
+using Supabase.Service;
+
 namespace UniPayslipIntegration
 {
     public class Worker : BackgroundService
@@ -16,7 +19,7 @@ namespace UniPayslipIntegration
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var supaBase = new SupaBaseService();
-            supaBase.SupaBaseClientConnection();
+            supaBase.SupaBaseClientConnection(_supabaseSettings.key, _supabaseSettings.url);
             supaBase.SupaBaseCompanyRun();
             supaBase.SupaBaseCompanyAdminRun();
             while (!stoppingToken.IsCancellationRequested)

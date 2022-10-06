@@ -12,13 +12,8 @@ namespace Supabase.Service
 {
     public class SupaBaseService
     {
-        public async void SupaBaseClientConnection()
+        public async void SupaBaseClientConnection(string key, string url)
         {
-            //var url = Environment.GetEnvironmentVariable("SUPABASE_URL");
-            //var key = Environment.GetEnvironmentVariable("SUPABASE_KEY");
-            var url = "https://ttyrdrkblkibpsiaqlyp.supabase.co";
-            var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0eXJkcmtibGtpYnBzaWFxbHlwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2NDg5MDM4OCwiZXhwIjoxOTgwNDY2Mzg4fQ.Y4kb_hLVihtsnxe76G_MwU8OcXa1VD4Speq-FlBvMfQ";
-
             await Supabase.Client.InitializeAsync(url, key);
         }
 
