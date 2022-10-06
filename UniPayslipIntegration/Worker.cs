@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Softrig;
 using Supabase.Service;
 using SupabaseConnection.Service;
 
@@ -26,6 +27,8 @@ namespace UniPayslipIntegration
             //employeeRun.PostSupaBaseEmployee();
             while (!stoppingToken.IsCancellationRequested)
             {
+
+                
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 _logger.LogInformation("Key {key}", _supabaseSettings.url);
                 _logger.LogInformation("Url {key}", _softRigSettings.authUrl);

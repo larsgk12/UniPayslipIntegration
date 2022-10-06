@@ -11,6 +11,7 @@ namespace UniPayslipIntegration
         public string authUrl { get; set; }
         public string softrigUrl { get; set; }
         public string certificatePassword { get; set; }
+        public string clientID { get; set; }
 
     }
     public class SupabaseSettings
