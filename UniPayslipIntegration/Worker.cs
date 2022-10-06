@@ -24,19 +24,16 @@ namespace UniPayslipIntegration
             supaBase.SupaBaseClientConnection(_supabaseSettings.key, _supabaseSettings.url);
             
             var employeeRun = new EmployeeCtrl();
-            //employeeRun.PostSupaBaseEmployee();
+
+            var uniDataService = new UniDataService();
+            uniDataService.InitSoftRigApi(_softRigSettings.softrigUrl, _softRigSettings.authUrl, _softRigSettings.certificatePassword, _softRigSettings.clientID);
+
             while (!stoppingToken.IsCancellationRequested)
             {
-
-                
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                _logger.LogInformation("Key {key}", _supabaseSettings.url);
-                _logger.LogInformation("Url {key}", _softRigSettings.authUrl);
 
                 await Task.Delay(10000, stoppingToken);
-               // await Task.Delay(1000, stoppingToken);
-                
-                employeeRun.GetSupaBaseEmployee();
+                await employeeRun.GetSupaBaseEmployee();
             }
         }
     }
