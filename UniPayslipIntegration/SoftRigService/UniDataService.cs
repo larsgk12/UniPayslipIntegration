@@ -93,7 +93,8 @@ public class UniDataService : IUniDataService
                                 EmployeeEmail = employee.Email,
                                 EmployeeID = employeeID,
                                 PayrollRunID = run.ID,
-                                SupaBaseCompanyID = employee.SupaBaseCompanyID
+                                SupaBaseCompanyID = employee.SupaBaseCompanyID,
+                                Date = DateTime.Now.ToString("yyyy-MM-dd"),
                             };
                             supabasePayroll.Add(s);
                         }

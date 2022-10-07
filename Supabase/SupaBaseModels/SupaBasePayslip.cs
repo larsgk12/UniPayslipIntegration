@@ -13,7 +13,9 @@ namespace SupabaseConnection.SupaBaseModels
     {
         [Column("email")]
         public string EmployeeEmail { get; set; }
+        [Column("date")]
         public string Date { get; set; }
+        [Column("data")]
         public string Data { get; set; }
         [Column("external_employee_id")]
         public int EmployeeID { get; set; }
