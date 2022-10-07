@@ -36,16 +36,17 @@ public class UniDataService : IUniDataService
 
     }
 
-    public async void InitSoftRigApi(string softrigUrl, string authUrl, string password, string clientId)
+    public void InitSoftRigApi(string softrigUrl, string authUrl, string password, string clientId)
     {
         _api = new Api(softrigUrl, authUrl);
         var certificate = new X509Certificate2(@"c:\temp\SoftRigCert_39034aee-5e6a-41b7-b464-6a263e0c0205.p12", password);
-        await _api.ServerLogin(clientId, "AppFramework Payroll.Admin", certificate);
-        Console.WriteLine("Logged into server");
-        Companies = await _api.GetCompanies();
-        foreach (var comp in Companies)
+        if (_api.ServerLogin(clientId, "AppFramework Payroll.Admin", certificate).Result)
         {
-            Console.WriteLine($"Companies to sync: {comp.Name}");
+            Companies = _api.GetCompanies().Result;
+            foreach (var comp in Companies)
+            {
+                Console.WriteLine($"Companies to sync: {comp.Name}");
+            }
         }
     }
 
