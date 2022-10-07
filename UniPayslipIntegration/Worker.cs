@@ -26,6 +26,7 @@ namespace UniPayslipIntegration
 
             var supabaseCompanies = new CompanyCtrl();
             var employeeRun = new EmployeeCtrl();
+            var supabasePayroll = new PayrollCtrl();
 
             var uniDataService = new UniDataService();
             uniDataService.InitSoftRigApi(_softRigSettings.softrigUrl, _softRigSettings.authUrl, _softRigSettings.certificatePassword, _softRigSettings.clientID);
@@ -37,10 +38,10 @@ namespace UniPayslipIntegration
                 if (uniDataService.Companies.Count > 0)
                 {
                     var uniCompanies = uniDataService.Companies;
-                    var comp = await supabaseCompanies.GetSupaBaseCompany();
+                    var supaBasecompanies = supabaseCompanies.GetSupaBaseCompany().Result;
 
-                    var listOfNewcompanies = uniCompanies.Where(c => comp.All(s => c.Key != s.Companykey)).ToList();
-                    if (listOfNewcompanies.Count > 0)
+                    var listOfNewcompanies = uniCompanies.Where(c => supaBasecompanies.All(s => c.Key != s.Companykey)).ToList();
+                    if (listOfNewcompanies.Count > 0) // New companies to sync
                     {
                         var supabaseComp = listOfNewcompanies.Select(c => new SupaBaseCompany { Companykey = c.Key, Name = c.Name }).ToList();
                         supabaseCompanies.PostSupaBaseCompany(supabaseComp);
@@ -59,6 +60,21 @@ namespace UniPayslipIntegration
                                 }
                             }
                         }
+                    }
+
+                    //Sync payslips fire
+                    //TODO compare only to new payrolls
+                    var employeeForPayslippSync = employeeRun.GetSupaBaseEmployeeToSync().Result;
+                    if (employeeForPayslippSync != null)
+                    {
+                        var companies = employeeForPayslippSync.GroupBy(e => e.SupaBaseCompanyID).Select(g => g.Key);
+                        foreach (var company in companies)
+                        {
+                            var supabaseCompany = supaBasecompanies.Where(c => c.id == company).First();
+                            var payslips = uniDataService.GetAllPayslips(employeeForPayslippSync.Where(e => e.SupaBaseCompanyID == company).ToList(), supabaseCompany.Companykey);
+                            supabasePayroll.PostSupaBasePayroll(payslips);
+                        }
+
                     }
                 }
                 await Task.Delay(1000, stoppingToken);

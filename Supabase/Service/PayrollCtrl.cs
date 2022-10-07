@@ -1,10 +1,4 @@
-﻿using Supabase.Models;
-using SupabaseConnection.SupaBaseModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SupabaseConnection.SupaBaseModels;
 
 namespace SupabaseConnection.Service
 {
@@ -22,8 +16,8 @@ namespace SupabaseConnection.Service
 
         public void PostSupaBasePayroll(List<SupaBasePayroll> payrolls)
         {
-                var instance = Supabase.Client.Instance;
-                var insert = instance.From<SupaBasePayroll>().Insert(payrolls);
+            var instance = Supabase.Client.Instance;
+            var insert = instance.From<SupaBasePayroll>().Insert(payrolls).Result;
         }
     }
 }
