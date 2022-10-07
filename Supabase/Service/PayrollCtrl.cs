@@ -18,7 +18,6 @@ namespace SupabaseConnection.Service
         {
             var instance = Supabase.Client.Instance;
             var insert = instance.From<SupaBasePayroll>().Insert(payrolls).Result;
-            Console.WriteLine("finished posting");
         }
     }
 }

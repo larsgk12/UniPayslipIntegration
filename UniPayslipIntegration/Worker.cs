@@ -63,7 +63,7 @@ namespace UniPayslipIntegration
                     }
 
                     //Sync payslips fire
-                    //TODO compare only to new payrolls
+                    //TODO only send not sendt earlier
                     var employeeForPayslippSync = employeeRun.GetSupaBaseEmployeeToSync().Result;
                     if (employeeForPayslippSync != null)
                     {

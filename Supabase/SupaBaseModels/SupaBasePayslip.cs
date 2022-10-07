@@ -23,7 +23,7 @@ namespace SupabaseConnection.SupaBaseModels
         public int PayrollRunID { get; set; }
 
         //SupaBaseColumns
-        [PrimaryKey("id")]
+        [PrimaryKey("id", false)]
         public int SupaBaseID { get; set; }
         [Column("company_id")]
         public int SupaBaseCompanyID { get; set; }

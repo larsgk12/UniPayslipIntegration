@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using SupabaseConnection.SupaBaseModels;
 using System.Dynamic;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace Softrig;
 
@@ -83,10 +84,11 @@ public class UniDataService : IUniDataService
                     foreach (var payslip in dynamicPayslips) // Match result to SupabasePayroll 
                     {
                         int employeeID = (int)payslip.employee.ID;
+                        DateTime payDate = payslip.payroll.PayDate;
                         var employee = employees.FirstOrDefault(e => e.ID == employeeID);
                         if (employee != null)
                         {
-                            var jsonPayslip = JsonConvert.SerializeObject(payslip);
+                            var jsonPayslip = JToken.Parse(JsonConvert.SerializeObject(payslip)).ToString();
                             var s = new SupaBasePayroll()
                             {
                                 Data = jsonPayslip,
@@ -94,7 +96,7 @@ public class UniDataService : IUniDataService
                                 EmployeeID = employeeID,
                                 PayrollRunID = run.ID,
                                 SupaBaseCompanyID = employee.SupaBaseCompanyID,
-                                Date = DateTime.Now.ToString("yyyy-MM-dd"),
+                                Date = payDate.ToString("yyyy-MM-dd"),
                             };
                             supabasePayroll.Add(s);
                         }
