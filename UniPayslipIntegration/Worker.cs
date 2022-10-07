@@ -64,7 +64,12 @@ namespace UniPayslipIntegration
 
                     //Sync payslips fire
                     //TODO only send not sendt earlier
-                    var employeeForPayslippSync = employeeRun.GetSupaBaseEmployeeToSync().Result;
+                    var employeeWithSync = employeeRun.GetSupaBaseEmployeeToSync().Result;
+                    var payslippInSupabase = supabasePayroll.GetSupaBasePayroll().Result;
+                    var employeesSyncedBefore = payslippInSupabase.GroupBy(g => g.EmployeeID).Select(g => g.Key);
+
+                    var employeeForPayslippSync = employeeWithSync.Where(e => employeesSyncedBefore.All(s => s != e.ID)).ToList();
+
                     if (employeeForPayslippSync != null)
                     {
                         var companies = employeeForPayslippSync.GroupBy(e => e.SupaBaseCompanyID).Select(g => g.Key);
@@ -72,13 +77,15 @@ namespace UniPayslipIntegration
                         {
                             var supabaseCompany = supaBasecompanies.Where(c => c.id == company).First();
                             var payslips = uniDataService.GetAllPayslips(employeeForPayslippSync.Where(e => e.SupaBaseCompanyID == company).ToList(), supabaseCompany.Companykey);
-                            if (payslips.Count > 0)
+                            if (payslips.Count > 0) { 
                                 supabasePayroll.PostSupaBasePayroll(payslips);
+                                Console.WriteLine($"Added new payslips:{payslips.Count}");
+                            }
                         }
 
                     }
                 }
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(10000, stoppingToken);
             }
         }
     }

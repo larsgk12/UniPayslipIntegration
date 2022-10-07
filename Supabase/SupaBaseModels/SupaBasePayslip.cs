@@ -16,11 +16,11 @@ namespace SupabaseConnection.SupaBaseModels
         [Column("date")]
         public string Date { get; set; }
         [Column("data")]
-        public string Data { get; set; }
+        public object Data { get; set; }
         [Column("external_employee_id")]
-        public int EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         [Column("external_payrollrun_id")]
-        public int PayrollRunID { get; set; }
+        public int? PayrollRunID { get; set; }
 
         //SupaBaseColumns
         [PrimaryKey("id", false)]
