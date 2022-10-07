@@ -22,19 +22,12 @@ namespace SupabaseConnection.Service
             return myCompanies;
         }
 
-        public async void PostSupaBaseCompany(List<SoftRigCompany> softRigCompanies)
+        public async Task<bool> PostSupaBaseCompany(List<Company> Companies)
         {
-            foreach (var softRigCompany in softRigCompanies)
-            {
-                var model = new Supabase.Models.Company
-                {
-                    name = softRigCompany.Name,
-                    companykey = softRigCompany.CompanyKey,
-                };
-
                 var instance = Supabase.Client.Instance;
-                var insert = await instance.From<Company>().Insert(model);
-            }
+                var insert = await instance.From<Company>().Insert(Companies);
+
+            return true;
         }
     }
 }

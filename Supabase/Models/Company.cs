@@ -12,8 +12,8 @@ public class Company : SupabaseModel
     [PrimaryKey("id", false)]
     public int id { get; set; }
     [Column("key")]
-    public string companykey { get; set; }
-    public string name { get; set; }
-    public string created_at { get; set; }
+    public string Companykey { get; set; }
+    [Column("name")]
+    public string Name { get; set; }
 
 }

@@ -13,34 +13,31 @@ namespace SupabaseConnection.Service
 {
     public class EmployeeCtrl
     {
-        public async Task<List<Employee>> GetSupaBaseEmployee()
+
+        public async Task<List<Employee>> GetSupaBaseEmployeeAll()
         {
             var instance = Supabase.Client.Instance;
 
-            // Access Postgrest using:
+            var Employees = await instance.From<Employee>().Get();
+            var allEmployees = Employees.Models.ToList();
+
+            return allEmployees;
+        }
+        public async Task<List<Employee>> GetSupaBaseEmployeeToSync()
+        {
+            var instance = Supabase.Client.Instance;
+
             var allEmployees = await instance.From<Employee>().Get();
 
-            List<Employee> employeesToSync = new List<Employee>(
-                allEmployees.Models.Where(c => c.sync == true).ToList());
+            var employeesToSync = allEmployees.Models.Where(c => c.sync == true).ToList();
             
             return employeesToSync;
         }
 
-        public async void PostSupaBaseEmployee(List<SoftRigEmployee> softRigEmployees)
+        public void PostSupaBaseEmployee(List<Employee> employees)
         {
-            foreach (var softRigEmployee in softRigEmployees)
-            {
-                var model = new Supabase.Models.Employee
-                {
-                    name = softRigEmployee.Name,
-                    external_id = softRigEmployee.ID,
-                    company_id = 3
-                };
-
                 var instance = Supabase.Client.Instance;
-                var insert = await instance.From<Employee>().Insert(model);
-                Console.WriteLine("Employee inserted" + softRigEmployee.Name);
-            }
+                var insert = instance.From<Employee>().Insert(employees);
         }
     }
 }
