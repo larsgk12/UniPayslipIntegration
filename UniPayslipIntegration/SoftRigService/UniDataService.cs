@@ -12,7 +12,7 @@ public interface IUniDataService
     Task<List<String>> GetPayslips(int payrollRunId, List<int> employees, string companyKey);
     Task<List<String>> GetPayrollruns(List<int> employees, string companyKey);
 
-    Task<List<SoftRigEmployee>> GetEmployees(string companyKey);
+    Task<List<SupaBaseEmployee>> GetEmployees(string companyKey);
     void FetchCompanies();
 
 }
