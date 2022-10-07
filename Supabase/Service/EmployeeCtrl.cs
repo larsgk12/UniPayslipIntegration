@@ -36,7 +36,7 @@ namespace SupabaseConnection.Service
         public void PostSupaBaseEmployee(List<SupaBaseEmployee> employees)
         {
             var instance = Supabase.Client.Instance;
-            var insert = instance.From<SupaBaseEmployee>().Insert(employees);
+            var insert = instance.From<SupaBaseEmployee>().Insert(employees).Result;
         }
     }
 }

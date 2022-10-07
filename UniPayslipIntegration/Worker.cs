@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using Softrig;
+using Supabase.Models;
 using Supabase.Service;
 using SupabaseConnection.Service;
 
@@ -39,25 +40,31 @@ namespace UniPayslipIntegration
                     var comp = await supabaseCompanies.GetSupaBaseCompany();
 
                     var listOfNewcompanies = uniCompanies.Where(c => comp.All(s => c.Key != s.Companykey)).ToList();
-                    //if (listOfNewcompanies.Count > 0)
-                    //{
-                    //    var supabaseComp = listOfNewcompanies.Select(c => new SupaBaseCompany { Companykey = c.Key, Name = c.Name }).ToList();
-                    //    supabaseCompanies.PostSupaBaseCompany(supabaseComp);
-                    //    var allSupbaseCompanies = supabaseCompanies.GetSupaBaseCompany();
-                    //    foreach (var newComp in listOfNewcompanies)
-                    //    {
-                    //        var employee = await uniDataService.GetEmployees(newComp.Key);
-                    //        employeeRun.PostSupaBaseEmployee(employee);
-                    //    }
-                    //}
-                    var empsToSync = employeeRun.GetSupaBaseEmployeeToSync().Result;
-                    string companyKey = listOfNewcompanies.Count > 0 ? listOfNewcompanies.FirstOrDefault().Key : "12312";
-                    uniDataService.GetAllPayslips(empsToSync.Select(e => e.ID).ToList(), companyKey);
-                    var employee1 = await uniDataService.GetEmployees("5aa44f21-936d-4792-93ae-60238e5ed754");
-
+                    if (listOfNewcompanies.Count > 0)
+                    {
+                        var supabaseComp = listOfNewcompanies.Select(c => new SupaBaseCompany { Companykey = c.Key, Name = c.Name }).ToList();
+                        supabaseCompanies.PostSupaBaseCompany(supabaseComp);
+                        var allSupbaseCompanies = supabaseCompanies.GetSupaBaseCompany().Result;
+                        foreach (var newComp in listOfNewcompanies)
+                        {
+                            var supabasecomp = allSupbaseCompanies.Where(c => c.Companykey == newComp.Key).FirstOrDefault();
+                            if (supabasecomp != null)
+                            {
+                                var employee = await uniDataService.GetEmployees(newComp.Key);
+                                if (employee != null)
+                                {
+                                    //Append supabasecompany
+                                    employee.ForEach(c => c.SupaBaseCompanyID = supabasecomp.id);
+                                    employeeRun.PostSupaBaseEmployee(employee);
+                                }
+                            }
+                        }
+                    }
                 }
                 await Task.Delay(1000, stoppingToken);
             }
         }
     }
+
+
 }
