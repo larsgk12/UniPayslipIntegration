@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Supabase.Models;
 
 [Table("employee")]
-public class Employee : SupabaseModel
+public class SupaBaseEmployee : SupabaseModel
 {
 
     [PrimaryKey("id", false)]
@@ -19,6 +19,6 @@ public class Employee : SupabaseModel
 
 public class EmployeeStatistics
 {
-    public List<Employee> Data { get; set; }
+    public List<SupaBaseEmployee> Data { get; set; }
 }
 

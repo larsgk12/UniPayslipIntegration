@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Supabase.Models;
 [Table("company")]
-public class Company : SupabaseModel
+public class SupaBaseCompany : SupabaseModel
 {
     [PrimaryKey("id", false)]
     public int id { get; set; }

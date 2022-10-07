@@ -43,7 +43,7 @@ namespace UniPayslipIntegration
                     var listOfNewcompanies = uniCompanies.Where(c => comp.All(s => c.Key != s.Companykey)).ToList();
                     if (listOfNewcompanies.Count > 0)
                     {
-                        var supabaseComp = listOfNewcompanies.Select(c => new Company { Companykey = c.Key, Name = c.Name }).ToList();
+                        var supabaseComp = listOfNewcompanies.Select(c => new SupaBaseCompany { Companykey = c.Key, Name = c.Name }).ToList();
                         supabaseCompanies.PostSupaBaseCompany(supabaseComp);
                         foreach (var newComp in listOfNewcompanies)
                         {

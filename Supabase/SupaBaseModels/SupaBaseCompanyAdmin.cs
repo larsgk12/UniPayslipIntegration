@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Supabase.Models;
 
 [Table("company_admin")]
-public class CompanyAdmin : SupabaseModel
+public class SupaBaseCompanyAdmin : SupabaseModel
 {
     [PrimaryKey("id", false)]
     public int id { get; set; }
@@ -22,5 +22,5 @@ public class CompanyAdmin : SupabaseModel
 
 public class CompanyAdminStatistics
 {
-    public List<SoftRigCompanyAdmin> Data { get; set; }
+    public List<SupaBaseCompanyAdmin> Data { get; set; }
 }

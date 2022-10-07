@@ -10,22 +10,22 @@ namespace SupabaseConnection.Service
 {
     public class CompanyCtrl
     {
-        public async Task<List<Company>> GetSupaBaseCompany()
+        public async Task<List<SupaBaseCompany>> GetSupaBaseCompany()
         {
             var instance = Supabase.Client.Instance;
 
-            var allCompanies = await instance.From<Company>().Get();
+            var allCompanies = await instance.From<SupaBaseCompany>().Get();
 
-            List<Company> myCompanies = new List<Company>(
+            List<SupaBaseCompany> myCompanies = new List<SupaBaseCompany>(
                 allCompanies.Models.ToList());
 
             return myCompanies;
         }
 
-        public void PostSupaBaseCompany(List<Company> Companies)
+        public void PostSupaBaseCompany(List<SupaBaseCompany> Companies)
         {
                 var instance = Supabase.Client.Instance;
-                var insert = instance.From<Company>().Insert(Companies);
+                var insert = instance.From<SupaBaseCompany>().Insert(Companies);
         }
     }
 }

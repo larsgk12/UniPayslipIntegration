@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using SupabaseConnection.SoftRigModels;
 using System.Text.Json;
 using Newtonsoft.Json;
+using Supabase.Models;
 
 namespace Softrig;
 
@@ -76,7 +77,7 @@ public class UniDataService : IUniDataService
         return payslips;
     }
 
-    public async Task<List<SoftRigEmployee>> GetEmployees(string companyKey)
+    public async Task<List<SupaBaseEmployee>> GetEmployees(string companyKey)
     {
         _api.CompanyKey = companyKey;
         string url = $"api/statistics?model=employee&expand=BusinessRelationInfo.DefaultEmail&select=ID as ID,BusinessRelationInfo.Name as Name,DefaultEmail.EmailAddress as email";

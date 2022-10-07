@@ -14,30 +14,30 @@ namespace SupabaseConnection.Service
     public class EmployeeCtrl
     {
 
-        public async Task<List<Employee>> GetSupaBaseEmployeeAll()
+        public async Task<List<SupaBaseEmployee>> GetSupaBaseEmployeeAll()
         {
             var instance = Supabase.Client.Instance;
 
-            var Employees = await instance.From<Employee>().Get();
+            var Employees = await instance.From<SupaBaseEmployee>().Get();
             var allEmployees = Employees.Models.ToList();
 
             return allEmployees;
         }
-        public async Task<List<Employee>> GetSupaBaseEmployeeToSync()
+        public async Task<List<SupaBaseEmployee>> GetSupaBaseEmployeeToSync()
         {
             var instance = Supabase.Client.Instance;
 
-            var allEmployees = await instance.From<Employee>().Get();
+            var allEmployees = await instance.From<SupaBaseEmployee>().Get();
 
             var employeesToSync = allEmployees.Models.Where(c => c.sync == true).ToList();
             
             return employeesToSync;
         }
 
-        public void PostSupaBaseEmployee(List<Employee> employees)
+        public void PostSupaBaseEmployee(List<SupaBaseEmployee> employees)
         {
                 var instance = Supabase.Client.Instance;
-                var insert = instance.From<Employee>().Insert(employees);
+                var insert = instance.From<SupaBaseEmployee>().Insert(employees);
         }
     }
 }
