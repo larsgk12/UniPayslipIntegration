@@ -1,4 +1,5 @@
 ﻿using Postgrest.Attributes;
+using Supabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace SupabaseConnection.SupaBaseModels
 {
-    public class SupaBasePayroll
+    [Table("payslip")]
+    public class SupaBasePayroll : SupabaseModel
     {
         [Column("email")]
         public string EmployeeEmail { get; set; }

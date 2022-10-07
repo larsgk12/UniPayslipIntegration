@@ -1,5 +1,4 @@
 ﻿using Supabase.Models;
-using SupabaseConnection.SoftRigModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +13,11 @@ namespace SupabaseConnection.Service
         {
             var instance = Supabase.Client.Instance;
 
-            var allCompanyAdmins = await instance.From<SupaBaseCompanyAdmin>().Get();
+            var CompanyAdmins = await instance.From<SupaBaseCompanyAdmin>().Get();
 
-            List<SupaBaseCompanyAdmin> myCompanyAdmins = new List<SupaBaseCompanyAdmin>(
-                allCompanyAdmins.Models.ToList());
+            var allCompanyAdmins = CompanyAdmins.Models.ToList();
 
-            return myCompanyAdmins;
+            return allCompanyAdmins;
         }
 
         public void PostSupaBaseCompanyAdmin(List<SupaBaseCompanyAdmin> CompanyAdmins)
