@@ -1,6 +1,5 @@
 ﻿using Supabase.Models;
 using Postgrest.Attributes;
-using SupabaseConnection.SoftRigModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
