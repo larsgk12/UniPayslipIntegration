@@ -72,9 +72,8 @@ public class UniDataService : IUniDataService
             {
                 string url = $"api/biz/paycheck?action=inselection&payrollID={run.ID}&employees={stringofEmp}";
                 var payslips = _api.Get(url).Result;
-                // MAtch result to SupabasePayroll 
+                // Match result to SupabasePayroll 
                 Console.WriteLine("Fetched payslips");
-
             }
 
         }
@@ -106,7 +105,8 @@ public class UniDataService : IUniDataService
     private List<PayrollRun> GetParollRun(string companyKey)
     {
         _api.CompanyKey = companyKey;
-        string url = $"biz/PayrollRun?filter=StatusCode > 1";
+        string url = $"api/biz/PayrollRun?filter=StatusCode ge 1";
+        //var payrollRuns = _api.Get<List<PayrollRun>>(url).Result;
         var payrollRuns = _api.Get<List<PayrollRun>>(url).Result;
         return payrollRuns;
 
