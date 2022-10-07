@@ -6,6 +6,8 @@ using Supabase.Models;
 using UniPayslipIntegration.SoftrigModels;
 using System.Collections.Generic;
 using SupabaseConnection.SupaBaseModels;
+using System.Dynamic;
+using Newtonsoft.Json.Converters;
 
 namespace Softrig;
 
@@ -60,24 +62,46 @@ public class UniDataService : IUniDataService
         }
     }
 
-    public List<SupaBasePayroll> GetAllPayslips(List<int> employees, string companyKey)
+    public List<SupaBasePayroll> GetAllPayslips(List<SupaBaseEmployee> employees, string companyKey)
     {
         _api.CompanyKey = companyKey;
         var payrollruns = GetParollRun(companyKey);
-        var stringofEmp = string.Join(",", employees.Select(n => n.ToString()).ToArray());
+        var stringofEmp = string.Join(",", employees.Select(e => e.ID).Select(n => n.ToString()).ToArray());
         var supabasePayroll = new List<SupaBasePayroll>();
         if (payrollruns != null)
         {
             foreach (var run in payrollruns) //Fetch payslips for every emp in company
             {
                 string url = $"api/biz/paycheck?action=inselection&payrollID={run.ID}&employees={stringofEmp}";
-                var payslips = _api.Get(url).Result;
-                // Match result to SupabasePayroll 
-                Console.WriteLine("Fetched payslips");
-            }
+                string payslips = _api.Get(url).Result;
 
+                var converter = new ExpandoObjectConverter();
+                dynamic? dynamicPayslips = JsonConvert.DeserializeObject<List<ExpandoObject>>(payslips, converter); //Expand to identify employee
+
+                if (dynamicPayslips != null)
+                {
+                    foreach (var payslip in dynamicPayslips) // Match result to SupabasePayroll 
+                    {
+                        int employeeID = (int)payslip.employee.ID;
+                        var employee = employees.FirstOrDefault(e => e.ID == employeeID);
+                        if (employee != null)
+                        {
+                            var jsonPayslip = JsonConvert.SerializeObject(payslip);
+                            var s = new SupaBasePayroll()
+                            {
+                                Data = jsonPayslip,
+                                EmployeeEmail = employee.Email,
+                                EmployeeID = employeeID,
+                                PayrollRunID = run.ID,
+                                SupaBaseCompanyID = employee.SupaBaseCompanyID
+                            };
+                            supabasePayroll.Add(s);
+                        }
+                    }
+                }
+            }
         }
-        return null;
+        return supabasePayroll;
     }
 
     public async Task<List<string>> GetPayslips(int payrollRunId, List<int> employees, string companyKey)
