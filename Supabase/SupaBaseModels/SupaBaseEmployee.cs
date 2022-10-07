@@ -10,6 +10,8 @@ public class SupaBaseEmployee : SupabaseModel
     public int ID  { get; set; }
     [Column("name")]
     public string Name { get; set; }
+    [Column("email")]
+    public string Email { get; set; }
     
     //SupaBaseFields
     [PrimaryKey("id", false)]
