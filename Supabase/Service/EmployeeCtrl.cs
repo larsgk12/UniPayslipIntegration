@@ -1,6 +1,5 @@
 ﻿using Supabase.Models;
 using Postgrest.Attributes;
-using SupabaseConnection.SoftRigModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +28,15 @@ namespace SupabaseConnection.Service
 
             var allEmployees = await instance.From<SupaBaseEmployee>().Get();
 
-            var employeesToSync = allEmployees.Models.Where(c => c.sync == true).ToList();
+            var employeesToSync = allEmployees.Models.Where(c => c.SupaBasesync == true).ToList();
             
             return employeesToSync;
         }
 
         public void PostSupaBaseEmployee(List<SupaBaseEmployee> employees)
         {
-                var instance = Supabase.Client.Instance;
-                var insert = instance.From<SupaBaseEmployee>().Insert(employees);
+            var instance = Supabase.Client.Instance;
+            var insert = instance.From<SupaBaseEmployee>().Insert(employees);
         }
     }
 }
