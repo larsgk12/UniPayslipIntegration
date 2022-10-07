@@ -22,12 +22,10 @@ namespace SupabaseConnection.Service
             return myCompanies;
         }
 
-        public async Task<bool> PostSupaBaseCompany(List<Company> Companies)
+        public void PostSupaBaseCompany(List<Company> Companies)
         {
                 var instance = Supabase.Client.Instance;
-                var insert = await instance.From<Company>().Insert(Companies);
-
-            return true;
+                var insert = instance.From<Company>().Insert(Companies);
         }
     }
 }

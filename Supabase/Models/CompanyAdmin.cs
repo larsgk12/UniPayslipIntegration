@@ -1,4 +1,5 @@
 ﻿using Postgrest.Attributes;
+using SupabaseConnection.SoftRigModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,14 @@ public class CompanyAdmin : SupabaseModel
 {
     [PrimaryKey("id", false)]
     public int id { get; set; }
-    public string name { get; set; }    
-    public string company_id { get; set; }
-    public string email { get; set; }
-    public string created_at { get; set; }
+    public string name { get; set; }
+    [Column("company_id")]
+    public int company_id { get; set; }
+    [Column("email")]
+    public string Email { get; set; }
+}
+
+public class CompanyAdminStatistics
+{
+    public List<SoftRigCompanyAdmin> Data { get; set; }
 }

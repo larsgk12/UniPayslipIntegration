@@ -13,4 +13,5 @@ namespace SupabaseConnection.SoftRigModels
         public string CompanyKey { get; set; }
         public string Email { get; set; }
     }
+
 }

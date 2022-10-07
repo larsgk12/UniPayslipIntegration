@@ -14,9 +14,4 @@ namespace SupabaseConnection.SoftRigModels
         public int companyID { get; set; }
     }
 
-    public class EmployeeStatistics
-    {
-        public List<SoftRigEmployee> Data { get; set; }
-
-    }
 }

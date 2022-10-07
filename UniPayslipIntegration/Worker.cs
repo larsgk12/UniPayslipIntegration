@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
 using Softrig;
+using Supabase.Models;
 using Supabase.Service;
 using SupabaseConnection.Service;
 using SupabaseConnection.SoftRigModels;
@@ -39,10 +40,10 @@ namespace UniPayslipIntegration
                     var uniCompanies = uniDataService.Companies;
                     var comp = await supabaseCompanies.GetSupaBaseCompany();
 
-                    var listOfNewcompanies = uniCompanies.Where(c => comp.All(s => c.Key != s.companykey)).ToList();
+                    var listOfNewcompanies = uniCompanies.Where(c => comp.All(s => c.Key != s.Companykey)).ToList();
                     if (listOfNewcompanies.Count > 0)
                     {
-                        var supabaseComp = listOfNewcompanies.Select(c => new SoftRigCompany() { CompanyKey = c.Key, Name = c.Name }).ToList();
+                        var supabaseComp = listOfNewcompanies.Select(c => new Company { Companykey = c.Key, Name = c.Name }).ToList();
                         supabaseCompanies.PostSupaBaseCompany(supabaseComp);
                         foreach (var newComp in listOfNewcompanies)
                         {

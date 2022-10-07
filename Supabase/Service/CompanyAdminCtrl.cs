@@ -22,19 +22,12 @@ namespace SupabaseConnection.Service
             return myCompanyAdmins;
         }
 
-        public async void PostSupaBaseCompanyAdmin(List<SoftRigCompanyAdmin> softRigCompanyAdmins)
+        public void PostSupaBaseCompanyAdmin(List<CompanyAdmin> CompanyAdmins)
         {
-            foreach (var softRigCompanyAdmin in softRigCompanyAdmins)
+            foreach (var CompanyAdmin in CompanyAdmins)
             {
-                var model = new Supabase.Models.CompanyAdmin
-                {
-                   name = softRigCompanyAdmin.name,
-                   email = softRigCompanyAdmin.Email,
-                   company_id = softRigCompanyAdmin.CompanyKey,
-                };
-
                 var instance = Supabase.Client.Instance;
-                var insert = await instance.From<CompanyAdmin>().Insert(model);
+                var insert = instance.From<CompanyAdmin>().Insert(CompanyAdmins);
             }
         }
     }
