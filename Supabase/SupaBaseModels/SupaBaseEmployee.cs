@@ -16,6 +16,7 @@ public class SupaBaseEmployee : SupabaseModel
     public int SupaBaseId { get; set; }
     [Column("company_id")]
     public int SupaBaseCompanyID { get; set; }
+    [Column("sync")]
     public bool SupaBasesync { get; set; }
 }
 

@@ -1,17 +1,17 @@
 ﻿using Economy;
 using System.Security.Cryptography.X509Certificates;
-using SupabaseConnection.SoftRigModels;
 using System.Text.Json;
 using Newtonsoft.Json;
 using Supabase.Models;
+using UniPayslipIntegration.SoftrigModels;
+using System.Collections.Generic;
+using SupabaseConnection.SupaBaseModels;
 
 namespace Softrig;
 
 public interface IUniDataService
 {
     Task<List<String>> GetPayslips(int payrollRunId, List<int> employees, string companyKey);
-    Task<List<String>> GetPayrollruns(List<int> employees, string companyKey);
-
     Task<List<SupaBaseEmployee>> GetEmployees(string companyKey);
     void FetchCompanies();
 
@@ -50,10 +50,6 @@ public class UniDataService : IUniDataService
         }
     }
 
-    public Task<List<string>> GetPayrollruns(List<int> employees, string companyKey)
-    {
-        throw new NotImplementedException();
-    }
 
     public async void FetchCompanies()
     {
@@ -64,11 +60,32 @@ public class UniDataService : IUniDataService
         }
     }
 
+    public List<SupaBasePayroll> GetAllPayslips(List<int> employees, string companyKey)
+    {
+        _api.CompanyKey = companyKey;
+        var payrollruns = GetParollRun(companyKey);
+        var stringofEmp = string.Join(",", employees.Select(n => n.ToString()).ToArray());
+        var supabasePayroll = new List<SupaBasePayroll>();
+        if (payrollruns != null)
+        {
+            foreach (var run in payrollruns) //Fetch payslips for every emp in company
+            {
+                string url = $"api/biz/paycheck?action=inselection&payrollID={run.ID}&employees={stringofEmp}";
+                var payslips = _api.Get(url).Result;
+                // MAtch result to SupabasePayroll 
+                Console.WriteLine("Fetched payslips");
+
+            }
+
+        }
+        return null;
+    }
+
     public async Task<List<string>> GetPayslips(int payrollRunId, List<int> employees, string companyKey)
     {
         string url = $"api/biz/paycheck?action=inselection&payrollID={payrollRunId}";
         List<string> payslips = new List<string>();
-        _api.AddCustomerHeader("companyKey", companyKey);
+        _api.CompanyKey = companyKey;
 
         await _api.Get(url);
         if (_api.LastResult != null)
@@ -84,9 +101,16 @@ public class UniDataService : IUniDataService
         string url = $"api/statistics?model=employee&expand=BusinessRelationInfo.DefaultEmail&select=ID as ID,BusinessRelationInfo.Name as Name,DefaultEmail.EmailAddress as email";
         var empJson = await _api.Get<EmployeeStatistics>(url);
         return empJson.Data;
+    }
 
-
+    private List<PayrollRun> GetParollRun(string companyKey)
+    {
+        _api.CompanyKey = companyKey;
+        string url = $"biz/PayrollRun?filter=StatusCode > 1";
+        var payrollRuns = _api.Get<List<PayrollRun>>(url).Result;
+        return payrollRuns;
 
     }
+
 }
 
